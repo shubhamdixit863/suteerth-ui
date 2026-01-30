@@ -1,6 +1,5 @@
 import { ListingDetail, Property } from '../types/property';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? '/api';
+import { API_BASE_URL } from './api';
 const DEFAULT_IMAGE =
   'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80';
 

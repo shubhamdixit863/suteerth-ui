@@ -4,9 +4,14 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { MapPin, Phone, Mail, Clock, CheckCircle2 } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, CheckCircle2, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { SiteProperties } from '../lib/siteProperties';
 
-export function ContactPage() {
+type ContactPageProps = {
+  site?: SiteProperties | null;
+};
+
+export function ContactPage({ site }: ContactPageProps) {
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -30,6 +35,15 @@ export function ContactPage() {
       });
     }, 5000);
   };
+
+  const address = site?.address?.trim() || '123 Real Estate Avenue, New York, NY 10001, United States';
+  const contact = site?.contact?.trim() || '(555) 123-4567';
+  const socialLinks = [
+    { label: 'Facebook', href: site?.facebook, icon: Facebook },
+    { label: 'Twitter', href: site?.twitter, icon: Twitter },
+    { label: 'Instagram', href: site?.instagram, icon: Instagram },
+    { label: 'LinkedIn', href: site?.linkedin, icon: Linkedin }
+  ].filter((link) => Boolean(link.href));
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -154,9 +168,7 @@ export function ContactPage() {
                   <div>
                     <h4 className="mb-1">Office Address</h4>
                     <p className="text-sm text-gray-600">
-                      123 Real Estate Avenue<br />
-                      New York, NY 10001<br />
-                      United States
+                      {address}
                     </p>
                   </div>
                 </div>
@@ -170,8 +182,7 @@ export function ContactPage() {
                   <div>
                     <h4 className="mb-1">Phone Number</h4>
                     <p className="text-sm text-gray-600">
-                      Main: (555) 123-4567<br />
-                      Toll Free: 1-800-REAL-EST
+                      {contact}
                     </p>
                   </div>
                 </div>
@@ -218,22 +229,25 @@ export function ContactPage() {
                   Follow us on social media for the latest property listings and real estate news.
                 </p>
                 <div className="flex gap-3">
-                  <Button variant="outline" size="icon">
-                    <span className="sr-only">Facebook</span>
-                    📘
-                  </Button>
-                  <Button variant="outline" size="icon">
-                    <span className="sr-only">Twitter</span>
-                    🐦
-                  </Button>
-                  <Button variant="outline" size="icon">
-                    <span className="sr-only">Instagram</span>
-                    📷
-                  </Button>
-                  <Button variant="outline" size="icon">
-                    <span className="sr-only">LinkedIn</span>
-                    💼
-                  </Button>
+                  {socialLinks.length === 0 && (
+                    <p className="text-sm text-gray-500">Social links coming soon.</p>
+                  )}
+                  {socialLinks.map((link) => {
+                    const Icon = link.icon;
+                    return (
+                      <Button
+                        key={link.label}
+                        variant="outline"
+                        size="icon"
+                        asChild
+                      >
+                        <a href={link.href} target="_blank" rel="noreferrer">
+                          <span className="sr-only">{link.label}</span>
+                          <Icon className="size-5" />
+                        </a>
+                      </Button>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
@@ -248,7 +262,7 @@ export function ContactPage() {
             <div className="text-center text-gray-600">
               <MapPin className="size-16 mx-auto mb-4" />
               <p className="text-xl">Interactive Map Would Appear Here</p>
-              <p className="text-sm mt-2">123 Real Estate Avenue, New York, NY 10001</p>
+              <p className="text-sm mt-2">{address}</p>
             </div>
           </div>
         </div>

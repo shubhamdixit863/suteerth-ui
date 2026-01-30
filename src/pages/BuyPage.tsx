@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { SearchFilters } from '../components/SearchFilters';
 import { PropertyGrid } from '../components/PropertyGrid';
 import { Property } from '../types/property';
@@ -9,6 +10,12 @@ export function BuyPage() {
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+
+  const searchQuery = useMemo(() => {
+    const query = searchParams.get('q');
+    return query ? query.trim().toLowerCase() : '';
+  }, [searchParams]);
 
   useEffect(() => {
     let isMounted = true;
@@ -18,9 +25,15 @@ export function BuyPage() {
         setIsLoading(true);
         const listings = await fetchListings({ page: 1, perPage: 50, type: 'buy' });
         const propertiesForSale = listings.filter((listing) => listing.type === 'sale');
+        const initialResults = searchQuery
+          ? propertiesForSale.filter((listing) => {
+              const haystack = `${listing.title} ${listing.location} ${listing.category} ${listing.type}`.toLowerCase();
+              return haystack.includes(searchQuery);
+            })
+          : propertiesForSale;
         if (isMounted) {
           setAllProperties(propertiesForSale);
-          setFilteredProperties(propertiesForSale);
+          setFilteredProperties(initialResults);
           setLoadError(null);
         }
       } catch (error) {
@@ -63,6 +76,13 @@ export function BuyPage() {
     filtered = filtered.filter(p => {
       return p.price >= filters.minPrice && p.price <= filters.maxPrice;
     });
+
+    if (searchQuery) {
+      filtered = filtered.filter((property) => {
+        const haystack = `${property.title} ${property.location} ${property.category} ${property.type}`.toLowerCase();
+        return haystack.includes(searchQuery);
+      });
+    }
 
     setFilteredProperties(filtered);
   };

@@ -2,8 +2,15 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { Award, Target, Heart, Shield } from 'lucide-react';
+import { SiteProperties } from '../lib/siteProperties';
 
-export function AboutPage() {
+type AboutPageProps = {
+  site?: SiteProperties | null;
+};
+
+export function AboutPage({ site }: AboutPageProps) {
+  const aboutUs = site?.about_us?.trim() ||
+    'Founded in 2010, RealEstate began with a simple mission: to make property buying, selling, and renting easier and more transparent for everyone.';
   const team = [
     {
       name: 'Sarah Johnson',
@@ -34,7 +41,7 @@ export function AboutPage() {
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl mb-4">About RealEstate</h1>
           <p className="text-xl max-w-2xl mx-auto">
-            Your trusted partner in finding the perfect property since 2010
+            {aboutUs}
           </p>
         </div>
       </div>
@@ -46,7 +53,7 @@ export function AboutPage() {
             <div>
               <h2 className="text-4xl mb-6">Our Story</h2>
               <p className="text-gray-600 mb-4">
-                Founded in 2010, RealEstate began with a simple mission: to make property buying, selling, and renting easier and more transparent for everyone. What started as a small local agency has grown into one of the most trusted names in real estate.
+                {aboutUs}
               </p>
               <p className="text-gray-600 mb-4">
                 With over a decade of experience, we've helped more than 10,000 families find their dream homes and assisted countless property owners in achieving their real estate goals. Our success is built on trust, expertise, and a genuine commitment to our clients.

@@ -1,17 +1,26 @@
 import { Home, Menu, X } from 'lucide-react';
-import { Button } from './ui/button';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SiteProperties } from '../lib/siteProperties';
 
-export function Navbar() {
+type NavbarProps = {
+  site?: SiteProperties | null;
+};
+
+export function Navbar({ site }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const logo = site?.logo?.trim();
 
   return (
     <nav className="bg-white border-b sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
-            <Home className="size-8 text-blue-600" />
+            {logo ? (
+              <img src={logo} alt="Site logo" className="h-8 w-auto" />
+            ) : (
+              <Home className="size-8 text-blue-600" />
+            )}
             <span className="text-xl">RealEstate</span>
           </Link>
 
@@ -29,11 +38,6 @@ export function Navbar() {
             <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">
               Contact
             </Link>
-          </div>
-
-          <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost">Sign In</Button>
-            <Button>Get Started</Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -61,10 +65,6 @@ export function Navbar() {
               <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition-colors" onClick={() => setMobileMenuOpen(false)}>
                 Contact
               </Link>
-              <div className="flex flex-col gap-2 pt-2">
-                <Button variant="ghost" className="w-full">Sign In</Button>
-                <Button className="w-full">Get Started</Button>
-              </div>
             </div>
           </div>
         )}
