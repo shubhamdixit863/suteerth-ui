@@ -24,39 +24,27 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
       - name: Sync dist to server
-        uses: burnett01/rsync-deployments@6.0.0
-        with:
-          switches: -az --delete
-          path: dist/
-          remote_path: /opt/suteerth.com/site/
-          remote_host: ${{ secrets.SSH_HOST }}
-          remote_user: ${{ secrets.SSH_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          remote_port: ${{ secrets.SSH_PORT }}
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -az --delete \
+            -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }}" \
+            dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/suteerth.com/site/
 
       - name: Sync Caddy config to server
-        uses: burnett01/rsync-deployments@6.0.0
-        with:
-          switches: -az
-          path: |
-            Caddyfile
-            docker-compose.yml
-          remote_path: /opt/suteerth.com/
-          remote_host: ${{ secrets.SSH_HOST }}
-          remote_user: ${{ secrets.SSH_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          remote_port: ${{ secrets.SSH_PORT }}
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -az \
+            -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }}" \
+            Caddyfile docker-compose.yml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/suteerth.com/
 
       - name: Restart Caddy
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            set -e
-            mkdir -p /opt/suteerth.com/site
-            cd /opt/suteerth.com
-            docker compose up -d
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
+            -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} <<'EOF'
+          set -e
+          mkdir -p /opt/suteerth.com/site
+          cd /opt/suteerth.com
+          docker compose up -d
+          EOF
