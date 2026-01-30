@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS / editor
+.DS_Store
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Env files
+.env
+.env.*
+
+# Caddy runtime
+caddy_data/
+caddy_config/
+
+# Local overrides
+*.local
