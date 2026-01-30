@@ -1,5 +1,6 @@
 import { Bed, Bath, Maximize, MapPin, Heart } from 'lucide-react';
 import { Property } from '../types/property';
+import { formatPrice } from '../lib/format';
 import { Card, CardContent, CardFooter } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -14,13 +15,6 @@ interface PropertyCardProps {
 export function PropertyCard({ property }: PropertyCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
   const navigate = useNavigate();
-
-  const formatPrice = (price: number, type: 'sale' | 'rent') => {
-    if (type === 'rent') {
-      return `$${price.toLocaleString()}/mo`;
-    }
-    return `$${price.toLocaleString()}`;
-  };
 
   const handleCardClick = () => {
     navigate(`/property/${property.id}`);

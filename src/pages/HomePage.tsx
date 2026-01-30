@@ -75,7 +75,7 @@ export function HomePage() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
                 <DollarSign className="size-8 text-green-600" />
               </div>
-              <div className="text-4xl mb-2">$2B+</div>
+              <div className="text-4xl mb-2">₹2B+</div>
               <p className="text-gray-600">Worth of Sales</p>
             </div>
             <div className="text-center">

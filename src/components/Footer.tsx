@@ -34,7 +34,7 @@ export function Footer({ site }: FooterProps) {
               ) : (
                 <Home className="size-8 text-blue-500" />
               )}
-              <span className="text-xl text-white">RealEstate</span>
+              {!logo && <span className="text-xl text-white">RealEstate</span>}
             </div>
             <p className="text-sm mb-4">{aboutSummary}</p>
             {socialLinks.length > 0 && (

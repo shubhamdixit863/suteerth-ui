@@ -31,6 +31,7 @@ import {
   MapPinned
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { formatPrice } from '../lib/format';
 import { createEnquiry, fetchListing, fetchListings } from '../lib/listings';
 
 const DEFAULT_DETAIL_IMAGE =
@@ -162,13 +163,6 @@ export function PropertyDetailPage() {
       </div>
     );
   }
-  const formatPrice = (price: number, type: 'sale' | 'rent') => {
-    if (type === 'rent') {
-      return `$${price.toLocaleString()}/mo`;
-    }
-    return `$${price.toLocaleString()}`;
-  };
-
   const nextImage = () => {
     setCurrentImageIndex((prev) => 
       prev === propertyDetail.images.length - 1 ? 0 : prev + 1

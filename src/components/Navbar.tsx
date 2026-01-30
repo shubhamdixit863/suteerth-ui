@@ -21,7 +21,7 @@ export function Navbar({ site }: NavbarProps) {
             ) : (
               <Home className="size-8 text-blue-600" />
             )}
-            <span className="text-xl">RealEstate</span>
+            {!logo && <span className="text-xl">RealEstate</span>}
           </Link>
 
           {/* Desktop Menu */}
