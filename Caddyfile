@@ -1,8 +1,7 @@
 suteerth.com {
   encode gzip zstd
 
-  @api path /api/*
-  handle @api {
+  handle_path /api/* {
     reverse_proxy host.docker.internal:8000
   }
 
