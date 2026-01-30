@@ -35,13 +35,22 @@ jobs:
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
           remote_port: ${{ secrets.SSH_PORT }}
 
-      - name: Sync Caddy config to server
+      - name: Sync Caddyfile to server
         uses: burnett01/rsync-deployments@6.0.0
         with:
           switches: -az
-          path: |
-            Caddyfile
-            docker-compose.yml
+          path: Caddyfile
+          remote_path: /opt/suteerth.com/
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_user: ${{ secrets.SSH_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_port: ${{ secrets.SSH_PORT }}
+
+      - name: Sync docker-compose.yml to server
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -az
+          path: docker-compose.yml
           remote_path: /opt/suteerth.com/
           remote_host: ${{ secrets.SSH_HOST }}
           remote_user: ${{ secrets.SSH_USER }}
